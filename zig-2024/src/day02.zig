@@ -77,7 +77,7 @@ const Report = struct {
         return result.toOwnedSlice();
     }
 
-    fn is_safe(this: @This(), allocator: Allocator, use_problem_dampener: bool) !bool {
+    fn isSafe(this: @This(), allocator: Allocator, use_problem_dampener: bool) !bool {
         if (use_problem_dampener) {
             for (0..this.values.len) |index_to_ignore| {
                 const steps_for_this_report = try this.steps(allocator, index_to_ignore);
@@ -87,7 +87,7 @@ const Report = struct {
                 var result = false;
 
                 for (steps_for_this_report) |step| {
-                    result = is_step_valid(last_step, step);
+                    result = isStepValid(last_step, step);
                     last_step = step;
 
                     if (!result) {
@@ -108,7 +108,7 @@ const Report = struct {
             var last_step: isize = 0;
 
             for (steps_for_this_report) |step| {
-                const result = is_step_valid(last_step, step);
+                const result = isStepValid(last_step, step);
                 last_step = step;
 
                 if (!result) {
@@ -121,7 +121,7 @@ const Report = struct {
     }
 };
 
-fn is_step_valid(from: isize, to: isize) bool {
+fn isStepValid(from: isize, to: isize) bool {
     const abs = @abs(to);
 
     if (abs < 1 or abs > 3) {
@@ -183,7 +183,7 @@ fn part1(allocator: Allocator, input: []const u8) !usize {
     var amount_of_safe_reports: usize = 0;
 
     for (data.reports) |report| {
-        if (try report.is_safe(allocator, false)) {
+        if (try report.isSafe(allocator, false)) {
             amount_of_safe_reports += 1;
         }
     }
@@ -198,7 +198,7 @@ fn part2(allocator: Allocator, input: []const u8) !usize {
     var amount_of_safe_reports: usize = 0;
 
     for (data.reports) |report| {
-        if (try report.is_safe(allocator, true)) {
+        if (try report.isSafe(allocator, true)) {
             amount_of_safe_reports += 1;
         }
     }
